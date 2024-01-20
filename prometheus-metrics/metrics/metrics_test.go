@@ -88,7 +88,6 @@ bar_total 20
 			server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 				_, _ = writer.Write([]byte(tt.in))
 			}))
-			defer server.Close()
 
 			m, err := Scrape(server.URL, tt.labels)
 
@@ -96,6 +95,11 @@ bar_total 20
 
 			tt.wantErr(t, err)
 			assert.Equal(t, tt.want, m)
+
+			server.Close()
+			_, err = Scrape(server.URL, tt.labels)
+			assert.Error(t, err)
+
 		})
 	}
 }
