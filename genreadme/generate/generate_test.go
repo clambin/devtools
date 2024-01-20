@@ -1,23 +1,18 @@
-package main
+package generate
 
 import (
 	"bytes"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"os"
 	"testing"
 )
 
-func TestCreateReadme(t *testing.T) {
-	f, err := os.CreateTemp("", "")
-	require.NoError(t, err)
-	_, err = f.Write([]byte("module github.com/clambin/foo\n"))
-	require.NoError(t, err)
-	_ = f.Close()
-	defer func() { require.NoError(t, os.Remove(f.Name())) }()
+func TestWrite(t *testing.T) {
+	modfile := bytes.NewBufferString(`module github.com/clambin/foo
+`)
 
 	var out bytes.Buffer
-	require.NoError(t, createREADME(&out, f.Name()))
+	require.NoError(t, Write(&out, modfile))
 
 	const want = `# foo
 [![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/clambin/foo?color=green&label=Release&style=plastic)](https://github.com/clambin/foo/releases)
@@ -61,12 +56,17 @@ module foo
 			input:   `invalid`,
 			wantErr: assert.Error,
 		},
+		{
+			name:    "empty",
+			wantErr: assert.Error,
+		},
 	}
 
 	for _, tt := range testCases {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
+
 			mod, err := getModFile(bytes.NewBufferString(tt.input))
 			tt.wantErr(t, err)
 			if err == nil {

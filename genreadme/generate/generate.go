@@ -1,37 +1,20 @@
-package main
+package generate
 
 import (
 	"errors"
-	"flag"
 	"fmt"
 	"golang.org/x/mod/modfile"
 	"io"
-	"os"
 	"path/filepath"
 	"strings"
 )
 
-var input = flag.String("input", "go.mod", "path of the go.mod file to read")
-
-func main() {
-	flag.Parse()
-	if err := createREADME(os.Stdout, *input); err != nil {
-		panic(err)
+func Write(w io.Writer, r io.Reader) error {
+	info, err := getModFile(r)
+	if err == nil {
+		writeREADME(w, info)
 	}
-}
-
-func createREADME(w io.Writer, filename string) error {
-	f, err := os.Open(filename)
-	if err != nil {
-		return err
-	}
-	defer func() { _ = f.Close() }()
-	info, err := getModFile(f)
-	if err != nil {
-		return fmt.Errorf("modfile: %w", err)
-	}
-	writeREADME(w, info)
-	return nil
+	return err
 }
 
 type modInfo struct {
@@ -47,6 +30,9 @@ func getModFile(source io.Reader) (modInfo, error) {
 	file, err := modfile.Parse("go.mod", mod, nil)
 	if err != nil {
 		return modInfo{}, fmt.Errorf("parse: %w", err)
+	}
+	if file.Module == nil {
+		return modInfo{}, errors.New("invalid go.mod file")
 	}
 	if !strings.HasPrefix(file.Module.Mod.Path, "github.com/") {
 		return modInfo{}, errors.New("only supports github-hosted repos")

@@ -12,10 +12,10 @@ import (
 )
 
 var (
-	addr    = flag.String("addr", "http://localhost:9090/metrics", "")
-	labels  = flag.Bool("labels", false, "")
-	filters = flag.String("filter", "^mediamon,^openvpn", "")
-	output  = flag.String("output", "text", "")
+	addr    = flag.String("addr", "http://localhost:9091/metrics", "Prometheus metrics URL")
+	labels  = flag.Bool("labels", false, "include labels")
+	filters = flag.String("filter", "", "comma-separated regexp filters for metric names")
+	output  = flag.String("output", "text", "output mode ("+strings.Join(reporters.Modes, ", ")+")")
 )
 
 func main() {
