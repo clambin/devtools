@@ -1,0 +1,14 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  test:
+    uses: clambin/workflows/.github/workflows/test.yaml@main
+  release:
+    needs:
+      - test
+    uses: clambin/workflows/.github/workflows/release.yaml@main
