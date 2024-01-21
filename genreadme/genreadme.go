@@ -78,7 +78,7 @@ func writeTitle(w io.Writer, info modInfo) {
 
 func writeTag(w io.Writer, info modInfo) {
 	writeLink(w,
-		"Release",
+		"release",
 		"https://img.shields.io/github/v/tag/"+info.strippedPath+"?color=green&label=Release&style=plastic",
 		"https://"+info.fullPath+"/releases",
 	)
@@ -86,18 +86,18 @@ func writeTag(w io.Writer, info modInfo) {
 
 func writeCodeCov(w io.Writer, info modInfo) {
 	writeLink(w,
-		"Codecov",
+		"codecov",
 		"https://img.shields.io/codecov/c/gh/"+info.strippedPath+"?style=plastic",
 		"https://app.codecov.io/gh/"+info.strippedPath,
 	)
 }
 
 func writeTest(w io.Writer, info modInfo) {
-	writeWorkFlowResult(w, info, "Test")
+	writeWorkFlowResult(w, info, "test")
 }
 
 func writeBuild(w io.Writer, info modInfo) {
-	writeWorkFlowResult(w, info, "Build")
+	writeWorkFlowResult(w, info, "build")
 }
 
 func writeWorkFlowResult(w io.Writer, info modInfo, action string) {
@@ -110,7 +110,7 @@ func writeWorkFlowResult(w io.Writer, info modInfo, action string) {
 
 func writeGoReport(w io.Writer, info modInfo) {
 	writeLink(w,
-		"Go Report Card",
+		"go report card",
 		"https://goreportcard.com/badge/"+info.fullPath,
 		"https://goreportcard.com/report/"+info.fullPath,
 	)
@@ -118,7 +118,7 @@ func writeGoReport(w io.Writer, info modInfo) {
 
 func writeLicense(w io.Writer, info modInfo) {
 	writeLink(w,
-		"License",
+		"license",
 		"https://img.shields.io/github/license/"+info.strippedPath+"?style=plastic",
 		"LICENSE.md",
 	)
@@ -126,7 +126,7 @@ func writeLicense(w io.Writer, info modInfo) {
 
 func writeGoDoc(w io.Writer, info modInfo) {
 	writeLink(w,
-		"GoDoc",
+		"godoc",
 		"https://pkg.go.dev/badge/"+info.fullPath+"?utm_source=godoc",
 		"https://pkg.go.dev/"+info.fullPath,
 	)
