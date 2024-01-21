@@ -79,7 +79,7 @@ func writeTitle(w io.Writer, info modInfo) {
 func writeTag(w io.Writer, info modInfo) {
 	writeLink(w,
 		"release",
-		"https://img.shields.io/github/v/tag/"+info.strippedPath+"?color=green&label=Release&style=plastic",
+		"https://img.shields.io/github/v/tag/"+info.strippedPath+"?color=green&label=release&style=plastic",
 		"https://"+info.fullPath+"/releases",
 	)
 }

@@ -19,7 +19,7 @@ func TestWrite(t *testing.T) {
 			name: "valid",
 			mod:  "module github.com/clambin/foo\n",
 			want: `# foo
-[![release](https://img.shields.io/github/v/tag/clambin/foo?color=green&label=Release&style=plastic)](https://github.com/clambin/foo/releases)
+[![release](https://img.shields.io/github/v/tag/clambin/foo?color=green&label=release&style=plastic)](https://github.com/clambin/foo/releases)
 [![codecov](https://img.shields.io/codecov/c/gh/clambin/foo?style=plastic)](https://app.codecov.io/gh/clambin/foo)
 [![test](https://github.com/clambin/foo/workflows/test/badge.svg)](https://github.com/clambin/foo/actions)
 [![build](https://github.com/clambin/foo/workflows/build/badge.svg)](https://github.com/clambin/foo/actions)
