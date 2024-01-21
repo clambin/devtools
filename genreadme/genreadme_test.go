@@ -1,29 +1,71 @@
-package generate
+package main
 
 import (
 	"bytes"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"os"
 	"testing"
 )
 
 func TestWrite(t *testing.T) {
-	modfile := bytes.NewBufferString(`module github.com/clambin/foo
-`)
-
-	var out bytes.Buffer
-	require.NoError(t, Write(&out, modfile))
-
-	const want = `# foo
-[![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/clambin/foo?color=green&label=Release&style=plastic)](https://github.com/clambin/foo/releases)
+	tests := []struct {
+		name    string
+		mod     string
+		want    string
+		wantErr assert.ErrorAssertionFunc
+	}{
+		{
+			name: "valid",
+			mod:  "module github.com/clambin/foo\n",
+			want: `# foo
+[![Release](https://img.shields.io/github/v/tag/clambin/foo?color=green&label=Release&style=plastic)](https://github.com/clambin/foo/releases)
 [![Codecov](https://img.shields.io/codecov/c/gh/clambin/foo?style=plastic)](https://app.codecov.io/gh/clambin/foo)
 [![Test](https://github.com/clambin/foo/workflows/Test/badge.svg)](https://github.com/clambin/foo/actions)
 [![Build](https://github.com/clambin/foo/workflows/Build/badge.svg)](https://github.com/clambin/foo/actions)
 [![Go Report Card](https://goreportcard.com/badge/github.com/clambin/foo)](https://goreportcard.com/report/github.com/clambin/foo)
 [![GoDoc](https://pkg.go.dev/badge/github.com/clambin/foo?utm_source=godoc)](https://pkg.go.dev/github.com/clambin/foo)
 [![License](https://img.shields.io/github/license/clambin/foo?style=plastic)](LICENSE.md)
-`
-	assert.Equal(t, want, out.String())
+`,
+			wantErr: assert.NoError,
+		},
+		{
+			name:    "invalid",
+			mod:     "not a valid go.mod file",
+			wantErr: assert.Error,
+		},
+		{
+			name:    "missing",
+			wantErr: assert.Error,
+		},
+	}
+
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			var filename string
+			if tt.mod != "" {
+				filename = mkTemp(t, tt.mod)
+				defer func() { _ = os.Remove(filename) }()
+			}
+
+			var out bytes.Buffer
+			tt.wantErr(t, Main(&out, filename))
+			assert.Equal(t, tt.want, out.String())
+		})
+	}
+}
+
+func mkTemp(t *testing.T, content string) string {
+	t.Helper()
+
+	f, err := os.CreateTemp("", "")
+	require.NoError(t, err)
+	_, err = f.Write([]byte(content))
+	require.NoError(t, err)
+	require.NoError(t, f.Close())
+
+	return f.Name()
 }
 
 func Test_getModFile(t *testing.T) {

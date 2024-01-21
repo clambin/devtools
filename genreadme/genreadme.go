@@ -1,20 +1,39 @@
-package generate
+package main
 
 import (
 	"errors"
+	"flag"
 	"fmt"
 	"golang.org/x/mod/modfile"
 	"io"
+	"os"
 	"path/filepath"
 	"strings"
 )
 
-func Write(w io.Writer, r io.Reader) error {
-	info, err := getModFile(r)
-	if err == nil {
-		writeREADME(w, info)
+var input = flag.String("input", "go.mod", "go.mod path")
+
+func main() {
+	flag.Parse()
+	if err := Main(os.Stdout, *input); err != nil {
+		_, _ = fmt.Fprintln(os.Stderr, err.Error())
+		os.Exit(1)
 	}
-	return err
+}
+
+func Main(w io.Writer, source string) error {
+	f, err := os.Open(source)
+	if err != nil {
+		return fmt.Errorf("failed to open go.mod: %w", err)
+	}
+	defer func() { _ = f.Close() }()
+
+	info, err := getModFile(f)
+	if err != nil {
+		return fmt.Errorf("failed to parse go.mod: %w", err)
+	}
+	writeREADME(w, info)
+	return nil
 }
 
 type modInfo struct {
@@ -54,12 +73,12 @@ func writeREADME(w io.Writer, info modInfo) {
 }
 
 func writeTitle(w io.Writer, info modInfo) {
-	_, _ = w.Write([]byte("# " + filepath.Base(info.fullPath) + "\n"))
+	writeLine(w, "# "+filepath.Base(info.fullPath))
 }
 
 func writeTag(w io.Writer, info modInfo) {
 	writeLink(w,
-		"GitHub tag (latest by date)",
+		"Release",
 		"https://img.shields.io/github/v/tag/"+info.strippedPath+"?color=green&label=Release&style=plastic",
 		"https://"+info.fullPath+"/releases",
 	)
@@ -118,5 +137,9 @@ func writeLink(w io.Writer, label, image, link string) {
 	if link != "" {
 		output = "[" + output + "](" + link + ")"
 	}
-	_, _ = w.Write([]byte(output + "\n"))
+	writeLine(w, output)
+}
+
+func writeLine(w io.Writer, line string) {
+	_, _ = w.Write([]byte(line + "\n"))
 }
