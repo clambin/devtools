@@ -43,6 +43,8 @@ func TestWrite(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			var filename string
 			if tt.mod != "" {
 				filename = mkTemp(t, tt.mod)

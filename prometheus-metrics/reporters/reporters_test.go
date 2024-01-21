@@ -52,6 +52,8 @@ func TestNewReporter(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+
 			var buf bytes.Buffer
 			_, err := reporters.NewReporter(&buf, tt.mode, tt.labels)
 			tt.wantErr(t, err)
