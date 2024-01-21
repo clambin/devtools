@@ -19,13 +19,13 @@ func TestWrite(t *testing.T) {
 			name: "valid",
 			mod:  "module github.com/clambin/foo\n",
 			want: `# foo
-[![Release](https://img.shields.io/github/v/tag/clambin/foo?color=green&label=Release&style=plastic)](https://github.com/clambin/foo/releases)
-[![Codecov](https://img.shields.io/codecov/c/gh/clambin/foo?style=plastic)](https://app.codecov.io/gh/clambin/foo)
-[![Test](https://github.com/clambin/foo/workflows/Test/badge.svg)](https://github.com/clambin/foo/actions)
-[![Build](https://github.com/clambin/foo/workflows/Build/badge.svg)](https://github.com/clambin/foo/actions)
-[![Go Report Card](https://goreportcard.com/badge/github.com/clambin/foo)](https://goreportcard.com/report/github.com/clambin/foo)
-[![GoDoc](https://pkg.go.dev/badge/github.com/clambin/foo?utm_source=godoc)](https://pkg.go.dev/github.com/clambin/foo)
-[![License](https://img.shields.io/github/license/clambin/foo?style=plastic)](LICENSE.md)
+[![release](https://img.shields.io/github/v/tag/clambin/foo?color=green&label=Release&style=plastic)](https://github.com/clambin/foo/releases)
+[![codecov](https://img.shields.io/codecov/c/gh/clambin/foo?style=plastic)](https://app.codecov.io/gh/clambin/foo)
+[![test](https://github.com/clambin/foo/workflows/test/badge.svg)](https://github.com/clambin/foo/actions)
+[![build](https://github.com/clambin/foo/workflows/build/badge.svg)](https://github.com/clambin/foo/actions)
+[![go report card](https://goreportcard.com/badge/github.com/clambin/foo)](https://goreportcard.com/report/github.com/clambin/foo)
+[![godoc](https://pkg.go.dev/badge/github.com/clambin/foo?utm_source=godoc)](https://pkg.go.dev/github.com/clambin/foo)
+[![license](https://img.shields.io/github/license/clambin/foo?style=plastic)](LICENSE.md)
 `,
 			wantErr: assert.NoError,
 		},
