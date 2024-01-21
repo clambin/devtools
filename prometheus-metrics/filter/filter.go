@@ -1,35 +1,47 @@
 package filter
 
 import (
-	"fmt"
 	"github.com/clambin/devtools/prometheus-metrics/metrics"
 	"regexp"
 )
 
 func Filter(in []metrics.Metric, filters []string) ([]metrics.Metric, error) {
+	if len(filters) == 0 {
+		return in, nil
+	}
+
+	f, err := newMatcher(filters)
+	if err != nil {
+		return nil, err
+	}
+
 	out := make([]metrics.Metric, 0, len(in))
-	re := make([]*regexp.Regexp, len(filters))
-
 	for i := range in {
-		var match bool
-		for j := range filters {
-			if re[j] == nil {
-				var err error
-				if re[j], err = regexp.Compile(filters[i]); err != nil {
-					return nil, fmt.Errorf("bad regexp %s: %w", filters[i], err)
-				}
-			}
-
-			if re[j].MatchString(in[i].Name) {
-				match = true
-				break
-			}
-		}
-
-		if len(filters) == 0 || match {
+		if f.Match(in[i]) {
 			out = append(out, in[i])
 		}
 	}
-
 	return out, nil
+}
+
+type matcher []*regexp.Regexp
+
+func newMatcher(filters []string) (f matcher, err error) {
+	f = make([]*regexp.Regexp, len(filters))
+	for i := range filters {
+		f[i], err = regexp.Compile(filters[i])
+		if err != nil {
+			break
+		}
+	}
+	return f, err
+}
+
+func (m matcher) Match(in metrics.Metric) bool {
+	for j := range m {
+		if m[j].MatchString(in.Name) {
+			return true
+		}
+	}
+	return len(m) == 0
 }
