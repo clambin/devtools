@@ -85,8 +85,12 @@ bar_total 20
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-				_, _ = writer.Write([]byte(tt.in))
+			server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+				if r.URL.Path == "/" {
+					_, _ = w.Write([]byte(tt.in))
+					return
+				}
+				http.Error(w, "", http.StatusNotFound)
 			}))
 
 			m, err := Scrape(server.URL, tt.labels)
@@ -95,6 +99,9 @@ bar_total 20
 
 			tt.wantErr(t, err)
 			assert.Equal(t, tt.want, m)
+
+			_, err = Scrape(server.URL+"/bad", tt.labels)
+			assert.Error(t, err)
 
 			server.Close()
 			_, err = Scrape(server.URL, tt.labels)

@@ -20,7 +20,7 @@ type Metric struct {
 func Scrape(target string, labels bool) ([]Metric, error) {
 	resp, err := http.Get(target)
 	if err != nil {
-		return nil, fmt.Errorf("http get: %w", err)
+		return nil, err
 	}
 	defer func() { _ = resp.Body.Close() }()
 	if resp.StatusCode != http.StatusOK {
