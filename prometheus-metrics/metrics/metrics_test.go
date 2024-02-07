@@ -69,7 +69,7 @@ bar_total 20
 `,
 			labels: true,
 			want: []Metric{
-				{Name: "bar_total", Help: "bar", Type: "COUNTER"},
+				{Name: "bar_total", Help: "bar", Labels: []string{}, Type: "COUNTER"},
 				{Name: "foo_total", Help: "foo", Labels: []string{"bar"}, Type: "COUNTER"},
 				{Name: "promhttp_metric_handler_requests_total", Help: "Total number of scrapes by HTTP status code.", Labels: []string{"code"}, Type: "COUNTER"},
 			},
