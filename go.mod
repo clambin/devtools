@@ -3,7 +3,7 @@ module github.com/clambin/devtools
 go 1.21
 
 require (
-	github.com/clambin/go-common/set v0.4.1
+	github.com/clambin/go-common/set v0.4.2
 	github.com/prometheus/client_model v0.5.0
 	github.com/prometheus/common v0.46.0
 	github.com/stretchr/testify v1.8.4
