@@ -41,7 +41,6 @@ func TestWrite(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
@@ -71,7 +70,7 @@ func mkTemp(t *testing.T, content string) string {
 }
 
 func Test_getModFile(t *testing.T) {
-	testCases := []struct {
+	tests := []struct {
 		name    string
 		input   string
 		want    modInfo
@@ -106,8 +105,7 @@ module foo
 		},
 	}
 
-	for _, tt := range testCases {
-		tt := tt
+	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			t.Parallel()
 
