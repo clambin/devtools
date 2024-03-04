@@ -6,6 +6,7 @@ import (
 	"github.com/clambin/devtools/prometheus-metrics/filter"
 	"github.com/clambin/devtools/prometheus-metrics/metrics"
 	"github.com/clambin/devtools/prometheus-metrics/reporters"
+	"io"
 	"os"
 	"slices"
 	"strings"
@@ -20,28 +21,31 @@ var (
 
 func main() {
 	flag.Parse()
-
-	enc, err := reporters.NewReporter(os.Stdout, *output, *labels)
-	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "%s (valid modes: %s)\n", err.Error(), strings.Join(reporters.Modes, ", "))
+	if err := Main(os.Stdout); err != nil {
+		_, _ = fmt.Fprintln(os.Stderr, err.Error())
 		os.Exit(1)
+	}
+}
+
+func Main(w io.Writer) error {
+	enc, err := reporters.NewReporter(w, *output, *labels)
+	if err != nil {
+		return fmt.Errorf("%w (valid modes: %s)", err, strings.Join(reporters.Modes, ", "))
 	}
 
 	m, err := metrics.Scrape(*addr, *labels)
 	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "failed to get metrics: %s\n", err.Error())
-		os.Exit(2)
+		return fmt.Errorf("failed to get metrics: %w", err)
 	}
 
 	m, err = filter.Filter(m, strings.Split(*filters, ","))
 	if err != nil {
-		_, _ = fmt.Fprintf(os.Stderr, "failed to filter metrics: %s\n", err.Error())
-		os.Exit(3)
+		return fmt.Errorf("failed to filter metrics: %w", err)
 	}
 
 	slices.SortFunc(m, func(a, b metrics.Metric) int {
 		return strings.Compare(a.Name, b.Name)
 	})
 
-	_ = enc.Encode(m)
+	return enc.Encode(m)
 }
