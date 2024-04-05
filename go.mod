@@ -1,6 +1,6 @@
 module github.com/clambin/devtools
 
-go 1.22.1
+go 1.22.2
 
 require (
 	github.com/clambin/go-common/set v0.4.3
