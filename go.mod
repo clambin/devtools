@@ -5,7 +5,7 @@ go 1.22.2
 require (
 	github.com/clambin/go-common/set v0.4.3
 	github.com/prometheus/client_model v0.6.1
-	github.com/prometheus/common v0.52.3
+	github.com/prometheus/common v0.53.0
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/mod v0.17.0
 )
