@@ -7,7 +7,7 @@ require (
 	github.com/prometheus/client_model v0.6.1
 	github.com/prometheus/common v0.55.0
 	github.com/stretchr/testify v1.9.0
-	golang.org/x/mod v0.19.0
+	golang.org/x/mod v0.20.0
 )
 
 require (
