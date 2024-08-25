@@ -94,20 +94,21 @@ bar_total 20
 				http.Error(w, "", http.StatusNotFound)
 			}))
 
-			m, err := Scrape(server.URL, tt.labels)
+			pass := func(_ Metric) bool { return true }
+
+			m, err := Scrape(server.URL, tt.labels, pass)
 
 			slices.SortFunc(m, func(a, b Metric) int { return strings.Compare(a.Name, b.Name) })
 
 			tt.wantErr(t, err)
 			assert.Equal(t, tt.want, m)
 
-			_, err = Scrape(server.URL+"/bad", tt.labels)
+			_, err = Scrape(server.URL+"/bad", tt.labels, pass)
 			assert.Error(t, err)
 
 			server.Close()
-			_, err = Scrape(server.URL, tt.labels)
+			_, err = Scrape(server.URL, tt.labels, pass)
 			assert.Error(t, err)
-
 		})
 	}
 }
