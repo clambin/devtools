@@ -4,6 +4,7 @@ import (
 	"github.com/clambin/devtools/prometheus-metrics/filter"
 	"github.com/clambin/devtools/prometheus-metrics/metrics"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"testing"
 )
 
@@ -45,11 +46,23 @@ func TestFilter(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			t.Parallel()
+			//t.Parallel()
 
-			out, err := filter.Filter(tt.in, tt.filters)
+			f, err := filter.Filter(tt.filters)
 			tt.wantErr(t, err)
-			assert.Equal(t, tt.want, out)
+
+			if err != nil {
+				return
+			}
+			require.NotNil(t, f)
+
+			var got []metrics.Metric
+			for _, m := range tt.in {
+				if f(m) {
+					got = append(got, m)
+				}
+			}
+			assert.Equal(t, tt.want, got)
 		})
 	}
 }

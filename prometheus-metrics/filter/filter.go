@@ -5,23 +5,13 @@ import (
 	"regexp"
 )
 
-func Filter(in []metrics.Metric, filters []string) ([]metrics.Metric, error) {
-	if len(filters) == 0 {
-		return in, nil
-	}
-
+func Filter(filters []string) (func(metric metrics.Metric) bool, error) {
 	f, err := newMatcher(filters)
 	if err != nil {
 		return nil, err
 	}
 
-	out := make([]metrics.Metric, 0, len(in))
-	for i := range in {
-		if f.Match(in[i]) {
-			out = append(out, in[i])
-		}
-	}
-	return out, nil
+	return f.Match, nil
 }
 
 type matcher []*regexp.Regexp

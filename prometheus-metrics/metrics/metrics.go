@@ -7,6 +7,7 @@ import (
 	prometheus "github.com/prometheus/client_model/go"
 	"github.com/prometheus/common/expfmt"
 	"io"
+	"iter"
 	"net/http"
 )
 
@@ -17,7 +18,7 @@ type Metric struct {
 	Labels []string `json:"labels,omitempty"`
 }
 
-func Scrape(target string, labels bool) ([]Metric, error) {
+func Scrape(target string, labels bool, shouldExport func(metric Metric) bool) ([]Metric, error) {
 	resp, err := http.Get(target)
 	if err != nil {
 		return nil, err
@@ -26,39 +27,46 @@ func Scrape(target string, labels bool) ([]Metric, error) {
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("http get: %s", resp.Status)
 	}
-	return GetMetrics(resp.Body, labels)
+	var result []Metric
+	for metric, err := range metrics(resp.Body, labels) {
+		if err != nil {
+			return nil, err
+		}
+		if shouldExport(metric) {
+			result = append(result, metric)
+		}
+	}
+	return result, nil
 }
 
-func GetMetrics(r io.Reader, withLabels bool) ([]Metric, error) {
-	dec := expfmt.NewDecoder(r, expfmt.TextVersion)
+func metrics(r io.Reader, withLabels bool) iter.Seq2[Metric, error] {
+	return func(yield func(Metric, error) bool) {
+		dec := expfmt.NewDecoder(r, expfmt.TextVersion)
+		for {
+			var m prometheus.MetricFamily
+			if err := dec.Decode(&m); err != nil {
+				if !errors.Is(err, io.EOF) {
+					yield(Metric{}, err)
+				}
+				return
+			}
 
-	var metrics []Metric
-	var err error
+			var labels []string
+			if withLabels {
+				labels = getLabels(&m)
+			}
 
-	for {
-		var m prometheus.MetricFamily
-		if err = dec.Decode(&m); err != nil {
-			break
+			metric := Metric{
+				Name:   m.GetName(),
+				Help:   m.GetHelp(),
+				Type:   m.GetType().String(),
+				Labels: labels,
+			}
+			if !yield(metric, nil) {
+				return
+			}
 		}
-
-		var labels []string
-		if withLabels {
-			labels = getLabels(&m)
-		}
-
-		metrics = append(metrics, Metric{
-			Name:   m.GetName(),
-			Help:   m.GetHelp(),
-			Type:   m.GetType().String(),
-			Labels: labels,
-		})
 	}
-
-	if errors.Is(err, io.EOF) {
-		err = nil
-	}
-
-	return metrics, err
 }
 
 func getLabels(m *prometheus.MetricFamily) []string {

@@ -33,14 +33,14 @@ func Main(w io.Writer) error {
 		return fmt.Errorf("%w (valid modes: %s)", err, strings.Join(reporters.Modes, ", "))
 	}
 
-	m, err := metrics.Scrape(*addr, *labels)
-	if err != nil {
-		return fmt.Errorf("failed to get metrics: %w", err)
-	}
-
-	m, err = filter.Filter(m, strings.Split(*filters, ","))
+	f, err := filter.Filter(strings.Split(*filters, ","))
 	if err != nil {
 		return fmt.Errorf("failed to filter metrics: %w", err)
+	}
+
+	m, err := metrics.Scrape(*addr, *labels, f)
+	if err != nil {
+		return fmt.Errorf("failed to get metrics: %w", err)
 	}
 
 	slices.SortFunc(m, func(a, b metrics.Metric) int {
