@@ -2,8 +2,8 @@ package main
 
 import (
 	"bytes"
+	"github.com/clambin/go-common/testutils"
 	"github.com/stretchr/testify/assert"
-	"net/http"
 	"net/http/httptest"
 	"testing"
 )
@@ -63,18 +63,18 @@ bar_total 20
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-				if tt.metrics == "" {
-					http.Error(w, "invalid", http.StatusNotFound)
-					return
+			var paths map[string]testutils.Path
+			if tt.metrics != "" {
+				paths = map[string]testutils.Path{
+					"/metrics": {nil, 0, []byte(tt.metrics)},
 				}
-				_, _ = w.Write([]byte(tt.metrics))
-			}))
+			}
+			s := httptest.NewServer(&testutils.TestServer{Paths: paths})
 			defer s.Close()
 
 			var out bytes.Buffer
 
-			*addr = s.URL
+			*addr = s.URL + "/metrics"
 			*output = tt.format
 			*filters = tt.filters
 			tt.wantErr(t, Main(&out))
