@@ -1,12 +1,13 @@
-name: build
+name: release
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*'
 
 permissions:
   packages: write
+  contents: write
 
 jobs:
   test:
@@ -20,3 +21,8 @@ jobs:
     with:
       image: ghcr.io/<user>/<module>
       dockerfile: Dockerfile
+  release:
+    needs:
+      - build
+    uses: clambin/workflows/.github/workflows/release.yaml@main
+

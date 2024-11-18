@@ -55,7 +55,7 @@ var (
 				files: []sourceFile{
 					{source: "actions/test.yaml", destination: ".github/workflows/test.yaml"},
 					{source: "actions/build.yaml", destination: ".github/workflows/build.yaml"},
-					{source: "actions/release.yaml", destination: ".github/workflows/release.yaml"},
+					{source: "actions/release-container.yaml", destination: ".github/workflows/release.yaml"},
 					{source: "actions/vulnerabilities.yaml", destination: ".github/workflows/vulnerabilities.yaml"},
 					{source: "actions/dependabot.yaml", destination: ".github/dependabot.yaml"},
 				},
