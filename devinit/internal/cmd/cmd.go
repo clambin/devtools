@@ -27,5 +27,5 @@ func init() {
 	rootCmd.PersistentFlags().StringP("output", "o", ".", "output path")
 	rootCmd.PersistentFlags().StringP("gomod", "g", "./go.mod", "path to module's go.mod file")
 
-	rootCmd.AddCommand(workFlowsCmd, licensesCmd, allCmd)
+	rootCmd.AddCommand(workFlowsCmd, readmeCmd, licensesCmd, allCmd)
 }
