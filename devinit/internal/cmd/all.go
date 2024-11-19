@@ -5,7 +5,7 @@ import "github.com/spf13/cobra"
 var (
 	allCmd = &cobra.Command{
 		Use:   "all",
-		Short: "Create all supported repository files",
+		Short: "create all supported repository files",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			for _, f := range []func(*cobra.Command, []string) error{
 				workFlowsCmd.RunE,

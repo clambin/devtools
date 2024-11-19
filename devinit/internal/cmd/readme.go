@@ -11,7 +11,7 @@ import (
 var (
 	readmeCmd = &cobra.Command{
 		Use:   "readme",
-		Short: "Generate basic README.md",
+		Short: "create README file",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			moduleType, _ := cmd.Flags().GetString("type")
 			output, _ := cmd.Flags().GetString("output")

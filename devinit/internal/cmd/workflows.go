@@ -15,7 +15,7 @@ var containerFiles embed.FS
 var (
 	workFlowsCmd = &cobra.Command{
 		Use:   "workflows",
-		Short: "set up github workflows",
+		Short: "create github workflows",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			moduleType, _ := cmd.Flags().GetString("type")
 			output, _ := cmd.Flags().GetString("output")

@@ -12,7 +12,7 @@ var licenseFiles embed.FS
 var (
 	licensesCmd = &cobra.Command{
 		Use:   "licenses",
-		Short: "set up license",
+		Short: "create license file",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			output, _ := cmd.Flags().GetString("output")
 			dryRun, _ := cmd.Flags().GetBool("dry-run")

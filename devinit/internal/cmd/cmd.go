@@ -21,11 +21,11 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringP("type", "t", "program", "Module type (program, container, library)")
-	rootCmd.PersistentFlags().BoolP("debug", "d", false, "Enable debug logging")
+	rootCmd.PersistentFlags().StringP("type", "t", "program", "module type (program, container, library)")
+	rootCmd.PersistentFlags().BoolP("debug", "d", false, "enable debug logging")
 	rootCmd.PersistentFlags().Bool("dry-run", false, "do not create files")
-	rootCmd.PersistentFlags().StringP("output", "o", ".", "Path to the directory containing the module")
-	rootCmd.PersistentFlags().StringP("gomod", "g", "./go.mod", "Path to module go.mod file")
+	rootCmd.PersistentFlags().StringP("output", "o", ".", "output path")
+	rootCmd.PersistentFlags().StringP("gomod", "g", "./go.mod", "path to module's go.mod file")
 
 	rootCmd.AddCommand(workFlowsCmd, licensesCmd, allCmd)
 }
