@@ -1,10 +1,12 @@
 package cmd
 
 import (
+	"bytes"
 	"embed"
 	"fmt"
 	"os"
 	"path/filepath"
+	"text/template"
 )
 
 type sourceFiles struct {
@@ -19,18 +21,23 @@ type sourceFile struct {
 
 type targetFiles map[string][]byte
 
-func createFiles(sources map[string][]sourceFiles, mode string, output string, dryRun bool) error {
+func createFiles(sources map[string][]sourceFiles, mode string, info modInfo, output string, dryRun bool) error {
 	source, ok := sources[mode]
 	if !ok {
 		return fmt.Errorf("unknown output type: %s", mode)
 	}
 
 	collected, err := collectFiles(source)
-	if err == nil && !dryRun {
-		err = writeFiles(output, collected)
+	if err != nil {
+		return fmt.Errorf("collecting files: %w", err)
 	}
-	return err
-
+	if collected, err = templateFiles(collected, info); err != nil {
+		return fmt.Errorf("processing files: %w", err)
+	}
+	if dryRun {
+		return nil
+	}
+	return writeFiles(output, collected)
 }
 
 func collectFiles(sources []sourceFiles) (targetFiles, error) {
@@ -42,6 +49,33 @@ func collectFiles(sources []sourceFiles) (targetFiles, error) {
 				return nil, fmt.Errorf("collect %s: %w", file.source, err)
 			}
 		}
+	}
+	return collected, nil
+}
+
+func templateFiles(sources targetFiles, info modInfo) (targetFiles, error) {
+	collected := make(targetFiles, len(sources))
+	for name, body := range sources {
+		tmpl := template.New("devinit")
+		tmpl.Delims("<<", ">>")
+		tmpl, err := tmpl.Parse(string(body))
+		if err != nil {
+			return nil, fmt.Errorf("parse template: %w", err)
+		}
+
+		args := struct {
+			App   string
+			Image string
+		}{
+			App: filepath.Base(info.strippedPath),
+			// TODO: support different registries?
+			Image: "ghcr.io/" + info.strippedPath,
+		}
+
+		var out bytes.Buffer
+		err = tmpl.Execute(&out, args)
+
+		collected[name] = out.Bytes()
 	}
 	return collected, nil
 }

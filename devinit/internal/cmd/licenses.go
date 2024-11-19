@@ -19,7 +19,7 @@ var (
 
 			//TODO: support more licenses
 			fmt.Println("Creating license file")
-			return createFiles(licenses, "mit", output, dryRun)
+			return createFiles(licenses, "mit", modInfo{}, output, dryRun)
 		},
 	}
 

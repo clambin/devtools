@@ -19,10 +19,16 @@ var (
 		RunE: func(cmd *cobra.Command, args []string) error {
 			moduleType, _ := cmd.Flags().GetString("type")
 			output, _ := cmd.Flags().GetString("output")
+			gomod := cmd.Flag("gomod").Value.String()
 			dryRun, _ := cmd.Flags().GetBool("dry-run")
 
+			info, err := readGoModFile(gomod)
+			if err != nil {
+				return fmt.Errorf("invalid go.mod: %w", err)
+			}
+
 			fmt.Printf("Creating GitHub workflows for %s module\n", moduleType)
-			return createFiles(workflows, moduleType, output, dryRun)
+			return createFiles(workflows, moduleType, info, output, dryRun)
 		},
 	}
 

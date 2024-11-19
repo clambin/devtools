@@ -31,7 +31,7 @@ func Test_licenses(t *testing.T) {
 			require.NoError(t, err)
 			t.Cleanup(func() { _ = os.RemoveAll(tmpDir) })
 
-			tt.wantErr(t, createFiles(licenses, tt.mode, tmpDir, false))
+			tt.wantErr(t, createFiles(licenses, tt.mode, modInfo{}, tmpDir, false))
 
 			for _, want := range tt.want {
 				_, err = os.Stat(filepath.Join(tmpDir, want))
