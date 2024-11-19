@@ -6,8 +6,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
-//go:embed actions/*
-var actionFiles embed.FS
+//go:embed workflows/*
+var workflowFiles embed.FS
 
 //go:embed container/*
 var containerFiles embed.FS
@@ -35,35 +35,35 @@ var (
 	workflows = map[string][]sourceFiles{
 		"library": {
 			{
-				fs: actionFiles,
+				fs: workflowFiles,
 				files: []sourceFile{
-					{source: "actions/libtest.yaml", destination: ".github/workflows/test.yaml"},
-					{source: "actions/release.yaml", destination: ".github/workflows/release.yaml"},
-					{source: "actions/vulnerabilities.yaml", destination: ".github/workflows/vulnerabilities.yaml"},
-					{source: "actions/dependabot.yaml", destination: ".github/dependabot.yaml"},
+					{source: "workflows/libtest.yaml", destination: ".github/workflows/test.yaml"},
+					{source: "workflows/release.yaml", destination: ".github/workflows/release.yaml"},
+					{source: "workflows/vulnerabilities.yaml", destination: ".github/workflows/vulnerabilities.yaml"},
+					{source: "workflows/dependabot.yaml", destination: ".github/dependabot.yaml"},
 				},
 			},
 		},
 		"program": {
 			{
-				fs: actionFiles,
+				fs: workflowFiles,
 				files: []sourceFile{
-					{source: "actions/test.yaml", destination: ".github/workflows/test.yaml"},
-					{source: "actions/release.yaml", destination: ".github/workflows/release.yaml"},
-					{source: "actions/vulnerabilities.yaml", destination: ".github/workflows/vulnerabilities.yaml"},
-					{source: "actions/dependabot.yaml", destination: ".github/dependabot.yaml"},
+					{source: "workflows/test.yaml", destination: ".github/workflows/test.yaml"},
+					{source: "workflows/release.yaml", destination: ".github/workflows/release.yaml"},
+					{source: "workflows/vulnerabilities.yaml", destination: ".github/workflows/vulnerabilities.yaml"},
+					{source: "workflows/dependabot.yaml", destination: ".github/dependabot.yaml"},
 				},
 			},
 		},
 		"container": {
 			{
-				fs: actionFiles,
+				fs: workflowFiles,
 				files: []sourceFile{
-					{source: "actions/test.yaml", destination: ".github/workflows/test.yaml"},
-					{source: "actions/build.yaml", destination: ".github/workflows/build.yaml"},
-					{source: "actions/release-container.yaml", destination: ".github/workflows/release.yaml"},
-					{source: "actions/vulnerabilities.yaml", destination: ".github/workflows/vulnerabilities.yaml"},
-					{source: "actions/dependabot.yaml", destination: ".github/dependabot.yaml"},
+					{source: "workflows/test.yaml", destination: ".github/workflows/test.yaml"},
+					{source: "workflows/build.yaml", destination: ".github/workflows/build.yaml"},
+					{source: "workflows/release-container.yaml", destination: ".github/workflows/release.yaml"},
+					{source: "workflows/vulnerabilities.yaml", destination: ".github/workflows/vulnerabilities.yaml"},
+					{source: "workflows/dependabot.yaml", destination: ".github/dependabot.yaml"},
 				},
 			},
 			{

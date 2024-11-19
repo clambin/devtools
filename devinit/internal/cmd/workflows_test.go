@@ -59,7 +59,7 @@ func Test_workflows_templates(t *testing.T) {
 	var err error
 	in["dockerfile"], err = containerFiles.ReadFile("container/Dockerfile")
 	require.NoError(t, err)
-	in["buildfile"], err = actionFiles.ReadFile("actions/build.yaml")
+	in["buildfile"], err = workflowFiles.ReadFile("workflows/build.yaml")
 	require.NoError(t, err)
 
 	info := modInfo{
