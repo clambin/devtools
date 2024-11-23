@@ -1,16 +1,11 @@
 package cmd
 
 import (
-	"embed"
 	"fmt"
+	"github.com/clambin/devtools/devinit/internal/cmd/container"
+	"github.com/clambin/devtools/devinit/internal/cmd/workflows"
 	"github.com/spf13/cobra"
 )
-
-//go:embed workflows/*
-var workflowFiles embed.FS
-
-//go:embed container/*
-var containerFiles embed.FS
 
 var (
 	workFlowsCmd = &cobra.Command{
@@ -28,48 +23,48 @@ var (
 			}
 
 			fmt.Printf("Creating GitHub workflows for %s module\n", moduleType)
-			return createFiles(workflows, moduleType, info, output, dryRun)
+			return createFiles(sources, moduleType, info, output, dryRun)
 		},
 	}
 
-	workflows = map[string][]sourceFiles{
+	sources = map[string][]sourceFiles{
 		"library": {
 			{
-				fs: workflowFiles,
+				fs: workflows.FS,
 				files: []sourceFile{
-					{source: "workflows/libtest.yaml", destination: ".github/workflows/test.yaml"},
-					{source: "workflows/release.yaml", destination: ".github/workflows/release.yaml"},
-					{source: "workflows/vulnerabilities.yaml", destination: ".github/workflows/vulnerabilities.yaml"},
-					{source: "workflows/dependabot.yaml", destination: ".github/dependabot.yaml"},
+					{source: "libtest.yaml", destination: ".github/workflows/test.yaml"},
+					{source: "release.yaml", destination: ".github/workflows/release.yaml"},
+					{source: "vulnerabilities.yaml", destination: ".github/workflows/vulnerabilities.yaml"},
+					{source: "dependabot.yaml", destination: ".github/dependabot.yaml"},
 				},
 			},
 		},
 		"program": {
 			{
-				fs: workflowFiles,
+				fs: workflows.FS,
 				files: []sourceFile{
-					{source: "workflows/test.yaml", destination: ".github/workflows/test.yaml"},
-					{source: "workflows/release.yaml", destination: ".github/workflows/release.yaml"},
-					{source: "workflows/vulnerabilities.yaml", destination: ".github/workflows/vulnerabilities.yaml"},
-					{source: "workflows/dependabot.yaml", destination: ".github/dependabot.yaml"},
+					{source: "test.yaml", destination: ".github/workflows/test.yaml"},
+					{source: "release.yaml", destination: ".github/workflows/release.yaml"},
+					{source: "vulnerabilities.yaml", destination: ".github/workflows/vulnerabilities.yaml"},
+					{source: "dependabot.yaml", destination: ".github/dependabot.yaml"},
 				},
 			},
 		},
 		"container": {
 			{
-				fs: workflowFiles,
+				fs: workflows.FS,
 				files: []sourceFile{
-					{source: "workflows/test.yaml", destination: ".github/workflows/test.yaml"},
-					{source: "workflows/build.yaml", destination: ".github/workflows/build.yaml"},
-					{source: "workflows/release-container.yaml", destination: ".github/workflows/release.yaml"},
-					{source: "workflows/vulnerabilities.yaml", destination: ".github/workflows/vulnerabilities.yaml"},
-					{source: "workflows/dependabot.yaml", destination: ".github/dependabot.yaml"},
+					{source: "test.yaml", destination: ".github/workflows/test.yaml"},
+					{source: "build.yaml", destination: ".github/workflows/build.yaml"},
+					{source: "release-container.yaml", destination: ".github/workflows/release.yaml"},
+					{source: "vulnerabilities.yaml", destination: ".github/workflows/vulnerabilities.yaml"},
+					{source: "dependabot.yaml", destination: ".github/dependabot.yaml"},
 				},
 			},
 			{
-				fs: containerFiles,
+				fs: container.FS,
 				files: []sourceFile{
-					{source: "container/Dockerfile", destination: "Dockerfile"},
+					{source: "Dockerfile", destination: "Dockerfile"},
 				},
 			},
 		},

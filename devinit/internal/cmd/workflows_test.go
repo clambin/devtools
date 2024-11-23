@@ -2,6 +2,8 @@ package cmd
 
 import (
 	"flag"
+	"github.com/clambin/devtools/devinit/internal/cmd/container"
+	"github.com/clambin/devtools/devinit/internal/cmd/workflows"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"os"
@@ -44,7 +46,7 @@ func Test_workflows(t *testing.T) {
 			require.NoError(t, err)
 			t.Cleanup(func() { _ = os.RemoveAll(tmpDir) })
 
-			tt.wantErr(t, createFiles(workflows, tt.mode, modInfo{}, tmpDir, false))
+			tt.wantErr(t, createFiles(sources, tt.mode, modInfo{}, tmpDir, false))
 
 			for _, want := range tt.want {
 				_, err = os.Stat(filepath.Join(tmpDir, want))
@@ -57,9 +59,9 @@ func Test_workflows(t *testing.T) {
 func Test_workflows_templates(t *testing.T) {
 	in := make(targetFiles, 2)
 	var err error
-	in["dockerfile"], err = containerFiles.ReadFile("container/Dockerfile")
+	in["dockerfile"], err = container.FS.ReadFile("Dockerfile")
 	require.NoError(t, err)
-	in["buildfile"], err = workflowFiles.ReadFile("workflows/build.yaml")
+	in["buildfile"], err = workflows.FS.ReadFile("build.yaml")
 	require.NoError(t, err)
 
 	info := modInfo{
