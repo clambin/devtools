@@ -4,7 +4,7 @@ go 1.23
 
 require (
 	github.com/clambin/go-common/set v0.4.3
-	github.com/clambin/go-common/testutils v0.3.0
+	github.com/clambin/go-common/testutils v0.4.1
 	github.com/prometheus/client_model v0.6.1
 	github.com/prometheus/common v0.60.1
 	github.com/spf13/cobra v1.8.1
