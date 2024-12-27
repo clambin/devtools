@@ -10,7 +10,7 @@ func Test_getModFile(t *testing.T) {
 	tests := []struct {
 		name    string
 		input   string
-		want    modInfo
+		want    Module
 		wantErr assert.ErrorAssertionFunc
 	}{
 		{
@@ -18,9 +18,10 @@ func Test_getModFile(t *testing.T) {
 			input: `
 module github.com/clambin/foo
 `,
-			want: modInfo{
-				fullPath:     "github.com/clambin/foo",
-				strippedPath: "clambin/foo",
+			want: Module{
+				Path:      "github.com/clambin/foo",
+				Name:      "clambin/foo",
+				ShortName: "foo",
 			},
 			wantErr: assert.NoError,
 		},
@@ -29,9 +30,10 @@ module github.com/clambin/foo
 			input: `
 module example.com/clambin/foo
 `,
-			want: modInfo{
-				fullPath:     "example.com/clambin/foo",
-				strippedPath: "clambin/foo",
+			want: Module{
+				Path:      "example.com/clambin/foo",
+				Name:      "clambin/foo",
+				ShortName: "foo",
 			},
 			wantErr: assert.NoError,
 		},

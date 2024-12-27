@@ -1,19 +1,15 @@
 package cmd
 
 import (
-	"flag"
-	"github.com/clambin/devtools/devinit/internal/cmd/container"
-	"github.com/clambin/devtools/devinit/internal/cmd/workflows"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 )
 
-var debug = flag.Bool("update", false, "update golden files")
-
-func Test_workflows(t *testing.T) {
+func Test_writeWorkflows(t *testing.T) {
 	tests := []struct {
 		mode    string
 		wantErr assert.ErrorAssertionFunc
@@ -46,38 +42,22 @@ func Test_workflows(t *testing.T) {
 			require.NoError(t, err)
 			t.Cleanup(func() { _ = os.RemoveAll(tmpDir) })
 
-			tt.wantErr(t, createFiles(sources, tt.mode, modInfo{}, tmpDir, false))
+			tt.wantErr(t, writeWorkflows(tmpDir, tt.mode, Module{Path: "example.com/foo/bar", Name: "foo/bar", ShortName: "bar"}))
 
 			for _, want := range tt.want {
-				_, err = os.Stat(filepath.Join(tmpDir, want))
+				got, err := os.ReadFile(filepath.Join(tmpDir, want))
 				assert.NoError(t, err)
+
+				gp := filepath.Join("testdata", strings.ToLower(t.Name()), filepath.Base(want)+".golden")
+
+				if *update {
+					require.NoError(t, os.WriteFile(gp, got, 0o644))
+				}
+
+				wantBody, err := os.ReadFile(gp)
+				require.NoError(t, err)
+				assert.Equal(t, string(wantBody), string(got))
 			}
 		})
-	}
-}
-
-func Test_workflows_templates(t *testing.T) {
-	in := make(targetFiles, 2)
-	var err error
-	in["dockerfile"], err = container.FS.ReadFile("Dockerfile")
-	require.NoError(t, err)
-	in["buildfile"], err = workflows.FS.ReadFile("build.yaml")
-	require.NoError(t, err)
-
-	info := modInfo{
-		fullPath:     "example.com/foo/bar",
-		strippedPath: "foo/bar",
-	}
-	out, err := templateFiles(in, info)
-	require.NoError(t, err)
-
-	for file, body := range out {
-		gp := filepath.Join("testdata", t.Name()+"-"+file+".golden")
-		if *debug {
-			require.NoError(t, os.WriteFile(gp, []byte(body), 0o644))
-		}
-		golden, err := os.ReadFile(gp)
-		require.NoError(t, err)
-		assert.Equal(t, string(golden), string(body))
 	}
 }

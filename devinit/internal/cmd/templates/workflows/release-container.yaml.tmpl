@@ -1,12 +1,13 @@
-name: build
+name: release
 
 on:
   push:
-    branches:
-      - main
+    tags:
+      - 'v*'
 
 permissions:
   packages: write
+  contents: write
 
 jobs:
   test:
@@ -18,5 +19,10 @@ jobs:
       - test
     uses: clambin/workflows/.github/workflows/build.yaml@main
     with:
-      image: <<.Image>>
+      image: << .Module.Name >>
       dockerfile: Dockerfile
+  release:
+    needs:
+      - build
+    uses: clambin/workflows/.github/workflows/release.yaml@main
+

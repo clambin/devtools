@@ -12,7 +12,7 @@ ADD . .
 RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
     go build \
     -ldflags="-X main.version=$VERSION" \
-    -o <<.App>> \
+    -o bar \
     .
 
 FROM alpine
@@ -21,11 +21,11 @@ RUN apk update && \
     apk add --no-cache tzdata
 
 WORKDIR /app
-COPY --from=builder /app/<<.App>> /app//<<.App>>
+COPY --from=builder /app/bar /app/bar
 
 RUN /usr/sbin/addgroup app
 RUN /usr/sbin/adduser app -G app -D
 USER app
 
-ENTRYPOINT ["/app/<<.App>>"]
+ENTRYPOINT ["/app/bar"]
 CMD []

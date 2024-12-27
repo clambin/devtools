@@ -26,6 +26,7 @@ func init() {
 	rootCmd.PersistentFlags().Bool("dry-run", false, "do not create files")
 	rootCmd.PersistentFlags().StringP("output", "o", ".", "output path")
 	rootCmd.PersistentFlags().StringP("gomod", "g", "./go.mod", "path to module's go.mod file")
+	rootCmd.PersistentFlags().StringP("author", "a", "MY NAME", "name to use in README & LICENSE")
 
 	rootCmd.AddCommand(workFlowsCmd, readmeCmd, licensesCmd, allCmd)
 }
