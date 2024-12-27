@@ -1,13 +1,12 @@
 package cmd
 
 import (
-	"embed"
 	"fmt"
 	"github.com/spf13/cobra"
+	"io"
+	"os"
+	"path/filepath"
 )
-
-//go:embed licenses/*
-var licenseFiles embed.FS
 
 var (
 	licensesCmd = &cobra.Command{
@@ -16,19 +15,27 @@ var (
 		RunE: func(cmd *cobra.Command, args []string) error {
 			output, _ := cmd.Flags().GetString("output")
 			dryRun, _ := cmd.Flags().GetBool("dry-run")
+			author, _ := cmd.Flags().GetString("author")
 
-			//TODO: support more licenses
 			fmt.Println("Creating license file")
-			return createFiles(licenses, "mit", modInfo{}, output, dryRun)
-		},
-	}
 
-	licenses = map[string][]sourceFiles{
-		"mit": {
-			{
-				fs:    licenseFiles,
-				files: []sourceFile{{source: "licenses/MIT.md", destination: "LICENSE.md"}},
-			},
+			if dryRun {
+				return nil
+			}
+			w, err := os.Create(filepath.Join(output, "LICENSE.md"))
+			if err != nil {
+				return fmt.Errorf("could not create LICENSE file: %w", err)
+			}
+			defer func() { _ = w.Close() }()
+			//TODO: support more licenses
+			return writeLicense(w, author, "MIT")
 		},
 	}
 )
+
+func writeLicense(w io.Writer, author string, _ string) error {
+	args := Arguments{
+		Author: author,
+	}
+	return writeFileFromTemplate(w, "MIT.md.tmpl", args)
+}

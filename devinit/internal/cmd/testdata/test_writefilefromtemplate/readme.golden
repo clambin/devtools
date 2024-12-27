@@ -1,0 +1,13 @@
+# bar
+[![release](https://img.shields.io/github/v/tag/foo/bar?color=green&label=release&style=plastic)](https://example.com/foo/bar/releases)
+[![codecov](https://img.shields.io/codecov/c/gh/foo/bar?style=plastic)](https://app.codecov.io/gh/foo/bar)
+[![go report card](https://goreportcard.com/badge/example.com/foo/bar)](https://goreportcard.com/report/example.com/foo/bar)
+[![test](https://example.com/foo/bar/workflows/test/badge.svg)](https://example.com/foo/bar/actions)
+
+## Authors
+
+* **Christophe Lambin**
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.

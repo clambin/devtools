@@ -1,0 +1,13 @@
+# foo
+[![release](https://img.shields.io/github/v/tag/clambin/foo?color=green&label=release&style=plastic)](https://github.com/clambin/foo/releases)
+[![codecov](https://img.shields.io/codecov/c/gh/clambin/foo?style=plastic)](https://app.codecov.io/gh/clambin/foo)
+[![go report card](https://goreportcard.com/badge/github.com/clambin/foo)](https://goreportcard.com/report/github.com/clambin/foo)
+[![build](https://github.com/clambin/foo/workflows/build/badge.svg)](https://github.com/clambin/foo/actions)
+
+## Authors
+
+* **MY NAME**
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.

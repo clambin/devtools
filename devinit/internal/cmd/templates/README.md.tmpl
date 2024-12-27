@@ -1,0 +1,14 @@
+# << .Module.ShortName >>
+[![release](https://img.shields.io/github/v/tag/<< .Module.Name >>?color=green&label=release&style=plastic)](https://<< .Module.Path >>/releases)
+[![codecov](https://img.shields.io/codecov/c/gh/<< .Module.Name >>?style=plastic)](https://app.codecov.io/gh/<< .Module.Name >>)
+[![go report card](https://goreportcard.com/badge/<< .Module.Path >>)](https://goreportcard.com/report/<< .Module.Path >>)
+<< $workflow := "test" >><< if eq .ModuleType "container" >><< $workflow = "build" >><< end >>[![<< $workflow >>](https://<< .Module.Path >>/workflows/<< $workflow >>/badge.svg)](https://<< .Module.Path >>/actions)
+<< if eq .ModuleType "library" >>[![godoc](https://pkg.go.dev/badge/<< .Module.Path >>?utm_source=godoc)](https://pkg.go.dev/<< .Module.Path >>)
+<< end >>
+## Authors
+
+* **<< .Author >>**
+
+## License
+
+This project is licensed under the << .License >> License - see the [LICENSE.md](LICENSE.md) file for details.
