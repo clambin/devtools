@@ -66,7 +66,7 @@ bar_total 20
 			var paths map[string]testutils.Path
 			if tt.metrics != "" {
 				paths = map[string]testutils.Path{
-					"/metrics": {nil, 0, []byte(tt.metrics)},
+					"/metrics": {Body: []byte(tt.metrics)},
 				}
 			}
 			s := httptest.NewServer(&testutils.TestServer{Paths: paths})
