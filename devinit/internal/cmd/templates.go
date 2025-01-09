@@ -16,6 +16,7 @@ type Arguments struct {
 	ModuleType string
 	Author     string
 	License    string
+	Year       int
 }
 
 type Module struct {

@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 var (
@@ -36,6 +37,7 @@ var (
 func writeLicense(w io.Writer, author string, _ string) error {
 	args := Arguments{
 		Author: author,
+		Year:   time.Now().Year(),
 	}
 	return writeFileFromTemplate(w, "MIT.md.tmpl", args)
 }
