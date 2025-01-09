@@ -1,13 +1,11 @@
 name: build
-
 on:
   push:
     branches:
       - main
-
 permissions:
+  contents: read
   packages: write
-
 jobs:
   test:
     uses: clambin/workflows/.github/workflows/test.yaml@main
