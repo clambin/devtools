@@ -36,8 +36,12 @@ var (
 				if err != nil {
 					return fmt.Errorf("could not create README.md: %w", err)
 				}
-				err = writeREADME(w, info, moduleType, author, "MIT")
-				_ = w.Close()
+				if err = writeREADME(w, info, moduleType, author, "MIT"); err != nil {
+					return fmt.Errorf("failed to write to README.md: %w", err)
+				}
+				if err = w.Close(); err != nil {
+					return fmt.Errorf("failed to save README.md: %w", err)
+				}
 			}
 
 			return err
