@@ -38,10 +38,7 @@ func Test_writeWorkflows(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.mode, func(t *testing.T) {
-			tmpDir, err := os.MkdirTemp("", "")
-			require.NoError(t, err)
-			t.Cleanup(func() { _ = os.RemoveAll(tmpDir) })
-
+			tmpDir := t.TempDir()
 			tt.wantErr(t, writeWorkflows(tmpDir, tt.mode, Module{Path: "example.com/foo/bar", Name: "foo/bar", ShortName: "bar"}))
 
 			for _, want := range tt.want {
