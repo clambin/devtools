@@ -70,7 +70,7 @@ bar_total 20
 				}
 			}
 			s := httptest.NewServer(&testutils.TestServer{Paths: paths})
-			defer s.Close()
+			t.Cleanup(s.Close)
 
 			var out bytes.Buffer
 
