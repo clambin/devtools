@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"github.com/clambin/go-common/testutils"
+	"codeberg.org/clambin/go-common/testutils"
 	"github.com/stretchr/testify/assert"
 	"net/http/httptest"
 	"testing"

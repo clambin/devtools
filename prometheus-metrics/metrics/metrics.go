@@ -1,9 +1,9 @@
 package metrics
 
 import (
+	"codeberg.org/clambin/go-common/set"
 	"errors"
 	"fmt"
-	"github.com/clambin/go-common/set"
 	prometheus "github.com/prometheus/client_model/go"
 	"github.com/prometheus/common/expfmt"
 	"io"
