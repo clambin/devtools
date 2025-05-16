@@ -2,11 +2,9 @@ module github.com/clambin/devtools
 
 go 1.24
 
-toolchain go1.24.0
-
 require (
 	codeberg.org/clambin/go-common/set v0.6.0
-	codeberg.org/clambin/go-common/testutils v0.6.0
+	codeberg.org/clambin/go-common/testutils v0.7.0
 	github.com/prometheus/client_model v0.6.1
 	github.com/prometheus/common v0.63.0
 	github.com/spf13/cobra v1.9.1

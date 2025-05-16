@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"codeberg.org/clambin/go-common/testutils"
 	"github.com/stretchr/testify/assert"
+	"net/http"
 	"net/http/httptest"
 	"testing"
 )
@@ -63,13 +64,13 @@ bar_total 20
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			var paths map[string]testutils.Path
+			var responses testutils.Responses
 			if tt.metrics != "" {
-				paths = map[string]testutils.Path{
-					"/metrics": {Body: []byte(tt.metrics)},
+				responses = testutils.Responses{
+					"/metrics": {http.MethodGet: {Body: tt.metrics}},
 				}
 			}
-			s := httptest.NewServer(&testutils.TestServer{Paths: paths})
+			s := httptest.NewServer(&testutils.TestServer{Responses: responses})
 			t.Cleanup(s.Close)
 
 			var out bytes.Buffer
