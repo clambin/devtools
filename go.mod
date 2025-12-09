@@ -1,6 +1,6 @@
 module github.com/clambin/devtools
 
-go 1.24
+go 1.24.0
 
 require (
 	codeberg.org/clambin/go-common/set v0.6.0
@@ -9,7 +9,7 @@ require (
 	github.com/prometheus/common v0.64.0
 	github.com/spf13/cobra v1.9.1
 	github.com/stretchr/testify v1.10.0
-	golang.org/x/mod v0.24.0
+	golang.org/x/mod v0.31.0
 )
 
 require (
